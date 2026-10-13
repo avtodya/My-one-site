@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>Путь до свободного веб-кодирования</title>
+<style>
+:root{
+  --bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--muted:#6e6e73;--line:rgba(0,0,0,.1);
+  --accent:#0071e3;--bar:rgba(245,245,247,.75);--seg:rgba(118,118,128,.14);--seg-on:#fff;
+  --shadow:0 2px 24px rgba(0,0,0,.06);--glow:.6;
+  color-scheme:light;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#000;--card:#1c1c1e;--text:#f5f5f7;--muted:#a1a1a6;--line:rgba(255,255,255,.14);
+  --accent:#2997ff;--bar:rgba(22,22,23,.72);--seg:rgba(118,118,128,.28);--seg-on:#636366;
+  --shadow:none;--glow:.75;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#000;--card:#1c1c1e;--text:#f5f5f7;--muted:#a1a1a6;--line:rgba(255,255,255,.14);
+  --accent:#2997ff;--bar:rgba(22,22,23,.72);--seg:rgba(118,118,128,.28);--seg-on:#636366;
+  --shadow:none;--glow:.75;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+/* мягкое переливающееся свечение */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--glow);
+  background:
+    radial-gradient(45% 40% at 15% 10%,rgba(0,113,227,.4),transparent 70%),
+    radial-gradient(40% 35% at 90% 15%,rgba(191,90,242,.35),transparent 70%),
+    radial-gradient(45% 40% at 70% 95%,rgba(255,159,10,.3),transparent 70%),
+    radial-gradient(40% 35% at 5% 85%,rgba(255,55,95,.25),transparent 70%);
+  background-size:160% 160%;animation:flow 18s ease-in-out infinite alternate}
+.wrap{max-width:860px;margin:0 auto;padding:8px 16px 56px}
+[hidden]{display:none!important}
+
+/* верхний блок: матовое стекло + сегментированный переключатель */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;padding:10px 16px;
+  background:var(--bar);border-bottom:1px solid var(--line);
+  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  animation:drop .8s cubic-bezier(.16,1,.3,1) both}
+.seg{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+  padding:3px;border-radius:14px;background:var(--seg)}
+@media(min-width:680px){.seg{grid-template-columns:repeat(4,1fr)}}
+.tab{appearance:none;-webkit-appearance:none;border:0;background:transparent;color:var(--text);
+  font:inherit;font-size:.92rem;font-weight:500;line-height:1.25;min-height:44px;padding:8px 6px;
+  border-radius:11px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:background .25s,box-shadow .25s,transform .15s}
+.tab.on{background:var(--seg-on);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.2),0 0 0 .5px rgba(0,0,0,.05)}
+.tab:active{transform:scale(.97)}
+@media(hover:hover){.tab:not(.on):hover{background:rgba(120,120,128,.14)}}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* анимации появления */
+.pop{animation:pop .9s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d,0s)}
+.hero{text-align:center;padding:44px 4px 28px}
+h1{margin:0;font-size:clamp(2rem,8vw,3.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;
+  color:var(--accent);
+  background:linear-gradient(90deg,#0071e3,#5e5ce6,#bf5af2,#ff375f,#ff9f0a);background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shine 7s ease-in-out infinite alternate}
+.card{background:var(--card);border-radius:24px;padding:28px 24px;margin-bottom:16px;box-shadow:var(--shadow)}
+h2{margin:0 0 14px;font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
+.text{margin:0;font-size:clamp(1.1rem,2.8vw,1.35rem);line-height:1.5;letter-spacing:-.01em}
+
+/* прогресс */
+.big{margin:0 0 14px;font-size:clamp(3rem,13vw,4.5rem);font-weight:700;letter-spacing:-.04em;line-height:1}
+.big small{font-size:.4em;font-weight:500;color:var(--muted);letter-spacing:0}
+.track{height:14px;border-radius:99px;overflow:hidden;background:var(--seg)}
+.fill{height:100%;width:var(--p,10%);border-radius:99px;
+  background:linear-gradient(90deg,#0071e3,#5e5ce6,#bf5af2,#ff375f);background-size:200% 100%;
+  animation:grow 1.5s .4s cubic-bezier(.16,1,.3,1) both,shine 4s ease-in-out infinite alternate}
+.scale{display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);font-size:.85rem}
+.note{margin:0;color:var(--muted)}
+
+/* списки в стиле iOS */
+.rows{list-style:none;margin:0;padding:0;display:block}
+.rows>*{border-top:1px solid var(--line)}
+.rows>:first-child{border-top:0}
+.rows li{min-height:58px;padding:14px 4px}
+.rows time{display:block;font-size:.8rem;font-weight:600;color:var(--accent)}
+a.row{display:flex;align-items:center;gap:10px;min-height:58px;padding:12px 4px;color:var(--text);
+  text-decoration:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity .2s}
+a.row .val{margin-left:auto;color:var(--muted)}
+a.row::after{content:"›";color:var(--muted);font-size:1.6rem;line-height:1}
+a.row:active{opacity:.5}
+@media(hover:hover){a.row:hover{opacity:.7}}
+
+@keyframes pop{from{opacity:0;transform:translateY(34px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes drop{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@keyframes flow{from{background-position:0% 0%}to{background-position:100% 100%}}
+@keyframes shine{from{background-position:0% 50%}to{background-position:100% 50%}}
+@keyframes grow{from{width:0}to{width:var(--p,10%)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <nav class="seg" role="tablist" aria-label="Разделы сайта">
+    <button type="button" class="tab on" role="tab" aria-selected="true" data-t="home">Главная</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-t="progress">Мой прогресс</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-t="today">Что я сегодня сделал?</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-t="contacts">Контакты</button>
+  </nav>
+</div>
+
+<div class="wrap">
+  <header class="hero pop"><h1>Путь до свободного веб-кодирования</h1></header>
+
+  <main>
+    <section id="home" class="view" role="tabpanel">
+      <div class="card pop">
+        <p class="text">Привет! Ты попал на мой первый и начальный сайт. Каждый день я рассказываю, как двигается мой прогресс и насколько силен я в навыках веб-кодирования. Моя цель - достичь полной свободы в написании кода для различных сайтов. Я очень надеюсь, что все получится :)</p>
+      </div>
+    </section>
+
+    <section id="progress" class="view" role="tabpanel" hidden>
+      <div class="card pop">
+        <h2>Мой прогресс</h2>
+        <p class="big"><span id="pnum">10</span><small> / 100%</small></p>
+        <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10" id="pbar">
+          <div class="fill"></div>
+        </div>
+        <div class="scale"><span>0%</span><span>100%</span></div>
+      </div>
+      <div class="card pop"><p class="note">Каждый день шкала растёт понемногу — следи за обновлениями!</p></div>
+    </section>
+
+    <section id="today" class="view" role="tabpanel" hidden>
+      <div class="card pop">
+        <h2>Что я сегодня сделал?</h2>
+        <ul class="rows">
+          <li class="pop"><time>13.10.2026</time>Научился писать лёгкие сайты.</li>
+          <li class="pop"></li>
+          <li class="pop"></li>
+          <li class="pop"></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contacts" class="view" role="tabpanel" hidden>
+      <div class="card pop">
+        <h2>Контакты</h2>
+        <div class="rows">
+          <a class="row pop" href="https://t.me/avtodya" target="_blank" rel="noopener"><span>Telegram</span><span class="val">@avtodya</span></a>
+          <a class="row pop" href="https://vk.com/tryhah" target="_blank" rel="noopener"><span>VK</span><span class="val">@tryhah</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// Меняй это число, чтобы обновить шкалу прогресса (0–100)
+var PROGRESS = 10;
+
+document.documentElement.style.setProperty('--p', PROGRESS + '%');
+document.getElementById('pnum').textContent = PROGRESS;
+document.getElementById('pbar').setAttribute('aria-valuenow', PROGRESS);
+
+var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
+
+// задержки для «всплывания» блоков по очереди
+views.forEach(function (v) {
+  Array.prototype.forEach.call(v.querySelectorAll('.pop'), function (el, i) {
+    el.style.setProperty('--d', (0.1 + i * 0.1) + 's');
+  });
+});
+
+function show(id) {
+  views.forEach(function (v) { v.hidden = (v.id !== id); });
+  tabs.forEach(function (t) {
+    var on = t.getAttribute('data-t') === id;
+    t.classList.toggle('on', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+}
+tabs.forEach(function (t) {
+  t.addEventListener('click', function () { show(t.getAttribute('data-t')); });
+});
+</script>
+</body>
+</html>
